@@ -1,0 +1,7 @@
+{
+  "Splunk": [{"cert_name": "Splunk Core Certified User", "issuer": "Splunk Inc.", "level": "Entry"}],
+  "Kubernetes": [{"cert_name": "Certified Kubernetes Administrator (CKA)", "issuer": "CNCF", "level": "Intermediate"}],
+  "Docker": [{"cert_name": "Docker Certified Associate", "issuer": "Mirantis", "level": "Entry"}],
+  "Wazuh": [{"cert_name": "Wazuh Certified Associate", "issuer": "Wazuh", "level": "Entry"}],
+  "Terraform": [{"cert_name": "HashiCorp Certified: Terraform Associate", "issuer": "HashiCorp", "level": "Entry"}]
+}

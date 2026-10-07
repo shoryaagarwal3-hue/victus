@@ -1,0 +1,75 @@
+{
+  "categories": [
+    {
+      "name": "Software",
+      "roles": [
+        "Software Engineer",
+        "Backend Developer",
+        "Frontend Developer",
+        "Full Stack Developer",
+        "Mobile Developer"
+      ]
+    },
+    {
+      "name": "Data / AI",
+      "roles": [
+        "Data Analyst",
+        "Data Scientist",
+        "Machine Learning Engineer",
+        "AI Engineer",
+        "MLOps Engineer"
+      ]
+    },
+    {
+      "name": "Cybersecurity",
+      "roles": [
+        "SOC Analyst",
+        "Security Analyst",
+        "Security Engineer",
+        "Cloud Security Engineer",
+        "Application Security Engineer",
+        "Penetration Tester",
+        "Ethical Hacker",
+        "Digital Forensics Analyst",
+        "Incident Response Analyst",
+        "Threat Intelligence Analyst",
+        "Security Architect",
+        "GRC / Cyber Risk Analyst",
+        "DevSecOps Engineer"
+      ]
+    },
+    {
+      "name": "Cloud / Infra",
+      "roles": [
+        "Cloud Engineer",
+        "DevOps Engineer",
+        "Site Reliability Engineer",
+        "Platform Engineer",
+        "Cloud Architect"
+      ]
+    },
+    {
+      "name": "Networking",
+      "roles": [
+        "Network Engineer",
+        "Network Security Engineer"
+      ]
+    },
+    {
+      "name": "Systems / Database",
+      "roles": [
+        "Systems Engineer",
+        "System Administrator",
+        "Database Administrator"
+      ]
+    },
+    {
+      "name": "Emerging",
+      "roles": [
+        "Blockchain Developer",
+        "IoT Engineer",
+        "Robotics Engineer"
+      ]
+    }
+  ]
+}

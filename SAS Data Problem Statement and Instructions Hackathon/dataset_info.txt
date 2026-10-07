@@ -1,0 +1,129 @@
+=== Analytics Jobs ===
+Shape: (15841, 8)
+Columns: ['s_no', 'experience', 'job_description', 'job_desig', 'job_type', 'key_skills', 'location', 'salary']
+Data types:
+s_no               int64
+experience           str
+job_description      str
+job_desig            str
+job_type             str
+key_skills           str
+location             str
+salary               str
+dtype: object
+
+Missing values:
+s_no                   0
+experience             0
+job_description     3508
+job_desig              0
+job_type           12011
+key_skills             1
+location               0
+salary                 0
+dtype: int64
+
+First few rows:
+   s_no experience                                    job_description  ...                                         key_skills                                   location  salary
+0     1   6-10 yrs  Must be knowledgeable and experienced in relat...  ...  Oracle SQL, PLSQL, PL, Oracle Forms, Oracle Re...                         Bengaluru, Chennai   6to10
+1     2   8-12 yrs  - Experience in building scalable and highly a...  ...  Javascript, HTML, JQuery, Web Development, Pla...                                  Bengaluru  10to15
+2     3    3-8 yrs                                                NaN  ...             SNOW, Servicenow, Servicenow Developer                            Hyderabad, Pune    0to3
+3     4    3-6 yrs       Our software engineers at Fiserv bring an...  ...  QTP, Flex, LAN, Application support, Performan...                                       Pune   6to10
+4     5   5-10 yrs  - More than 5 years experience in Hypermesh fo...  ...  HyperMesh, LS - DYNA, NASTRAN, Abaqus, Fatigue...  Mumbai, Bengaluru, Hyderabad, Pune, Delhi  10to15
+
+[5 rows x 8 columns]
+
+=== DataScience Jobs ===
+Shape: (1602, 8)
+Columns: ['reference_no', 'company_name', 'job_title', 'min_experience', 'avg_salary', 'min_salary', 'max_salary', 'num_of_jobs']
+Data types:
+reference_no      int64
+company_name        str
+job_title           str
+min_experience    int64
+avg_salary          str
+min_salary          str
+max_salary          str
+num_of_jobs       int64
+dtype: object
+
+Missing values:
+reference_no      0
+company_name      0
+job_title         0
+min_experience    0
+avg_salary        0
+min_salary        0
+max_salary        0
+num_of_jobs       0
+dtype: int64
+
+First few rows:
+   reference_no company_name       job_title  min_experience avg_salary min_salary max_salary  num_of_jobs
+0          7834          TCS  Data Scientist               2       7.8L       4.5L      16.0L          841
+1          7862    Accenture  Data Scientist               2      12.8L       5.8L      23.0L          501
+2          5925          IBM  Data Scientist               2      13.4L       5.3L      25.0L          394
+3          7578    Cognizant  Data Scientist               2       9.8L       5.0L      18.0L          318
+4          7177    Capgemini  Data Scientist               2       8.6L       4.8L      14.6L          300
+
+=== JDS Skill Traits ===
+Shape: (139, 7)
+Columns: ['id', 'big_data_skills', 'maths-stats_skills', 'coding_skills', 'ai_and_ml_skills', 'dashboard_and_storytelling_skills', 'salary_hike_high_or_low']
+Data types:
+id                                     int64
+big_data_skills                      float64
+maths-stats_skills                   float64
+coding_skills                        float64
+ai_and_ml_skills                     float64
+dashboard_and_storytelling_skills    float64
+salary_hike_high_or_low                int64
+dtype: object
+
+Missing values:
+id                                   0
+big_data_skills                      0
+maths-stats_skills                   0
+coding_skills                        0
+ai_and_ml_skills                     0
+dashboard_and_storytelling_skills    0
+salary_hike_high_or_low              0
+dtype: int64
+
+First few rows:
+     id  big_data_skills  maths-stats_skills  coding_skills  ai_and_ml_skills  dashboard_and_storytelling_skills  salary_hike_high_or_low
+0  2809              3.6                 4.0            4.5               4.8                                5.0                        1
+1  2231              5.0                 3.8            3.3               5.0                                4.4                        0
+2  3522              4.1                 3.8            4.4               4.2                                5.0                        1
+3  3291              4.4                 3.0            3.3               4.6                                2.3                        0
+4  3424              2.3                 2.3            2.6               3.3                                3.0                        0
+
+=== SDS Personality Traits ===
+Shape: (161, 7)
+Columns: ['id', 'neuroticism', ' extraversion', 'openness_to_experience', 'agreeableness', 'conscientiousness', 'success_ classification_ high_low']
+Data types:
+id                                   int64
+neuroticism                          int64
+ extraversion                        int64
+openness_to_experience               int64
+agreeableness                        int64
+conscientiousness                    int64
+success_ classification_ high_low    int64
+dtype: object
+
+Missing values:
+id                                   0
+neuroticism                          0
+ extraversion                        0
+openness_to_experience               0
+agreeableness                        0
+conscientiousness                    0
+success_ classification_ high_low    0
+dtype: int64
+
+First few rows:
+     id  neuroticism   extraversion  openness_to_experience  agreeableness  conscientiousness  success_ classification_ high_low
+0  8120           33             34                      39             45                 51                                  1
+1  8951           50             36                      31             59                 39                                  0
+2  8656           38             35                      42             39                 49                                  1
+3  8796           41             26                      30             40                 19                                  0
+4  8470           20             17                      21             31                 26                                  0

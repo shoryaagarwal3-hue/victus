@@ -1,0 +1,147 @@
+{
+  "SOC Analyst": {
+    "provenance": {
+      "metric": "relative_demand_index_0_to_100",
+      "source": "Curated Cybersecurity Role Benchmark (NASSCOM / SANS Q3 2024)",
+      "source_type": "DERIVED",
+      "date": "2024-Q3",
+      "denominator": 100,
+      "confidence": 0.92
+    },
+    "foundation_concepts": [
+      "OSI Model",
+      "Symmetric Cryptography",
+      "Access Control Theory",
+      "Incident Response Lifecycle"
+    ],
+    "toolchain": [
+      {
+        "name": "Wazuh",
+        "demand": 78,
+        "aliases": ["wazuh siem", "host intrusion detection", "hids"],
+        "metric": "relative_demand_index",
+        "source": "Curated Cybersecurity Role Benchmark (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.90
+      },
+      {
+        "name": "Splunk",
+        "demand": 84,
+        "aliases": ["splunk siem", "security information and event management", "log analysis"],
+        "metric": "relative_demand_index",
+        "source": "Curated Cybersecurity Role Benchmark (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.94
+      },
+      {
+        "name": "Suricata",
+        "demand": 72,
+        "aliases": ["ids/ips", "network intrusion detection", "packet inspection"],
+        "metric": "relative_demand_index",
+        "source": "Curated Cybersecurity Role Benchmark (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.88
+      },
+      {
+        "name": "ELK Stack",
+        "demand": 76,
+        "aliases": ["elk", "elastic stack", "elasticsearch", "logstash", "kibana"],
+        "metric": "relative_demand_index",
+        "source": "Curated Cybersecurity Role Benchmark (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.90
+      },
+      {
+        "name": "MITRE ATT&CK",
+        "demand": 88,
+        "aliases": ["mitre attack", "attack framework", "ttp", "tactics techniques procedures"],
+        "metric": "relative_demand_index",
+        "source": "Curated Cybersecurity Role Benchmark (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.95
+      }
+    ]
+  },
+  "Cloud Security Engineer": {
+    "provenance": {
+      "metric": "relative_demand_index_0_to_100",
+      "source": "Cloud Security Alliance & Industry Survey (Q3 2024)",
+      "source_type": "DERIVED",
+      "date": "2024-Q3",
+      "denominator": 100,
+      "confidence": 0.93
+    },
+    "foundation_concepts": [
+      "IAM Principles",
+      "Shared Responsibility Model",
+      "Zero Trust Architecture"
+    ],
+    "toolchain": [
+      {
+        "name": "Docker",
+        "demand": 82,
+        "aliases": ["containerization", "docker containers"],
+        "metric": "relative_demand_index",
+        "source": "Cloud Security Alliance (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.92
+      },
+      {
+        "name": "Kubernetes",
+        "demand": 86,
+        "aliases": ["k8s", "container orchestration"],
+        "metric": "relative_demand_index",
+        "source": "Cloud Security Alliance (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.95
+      },
+      {
+        "name": "Trivy",
+        "demand": 68,
+        "aliases": ["container vulnerability scanning"],
+        "metric": "relative_demand_index",
+        "source": "Cloud Security Alliance (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.86
+      },
+      {
+        "name": "Terraform",
+        "demand": 79,
+        "aliases": ["infrastructure as code", "iac"],
+        "metric": "relative_demand_index",
+        "source": "Cloud Security Alliance (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.91
+      },
+      {
+        "name": "AWS IAM",
+        "demand": 88,
+        "aliases": ["iam", "identity and access management"],
+        "metric": "relative_demand_index",
+        "source": "Cloud Security Alliance (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.94
+      },
+      {
+        "name": "Falco",
+        "demand": 61,
+        "aliases": ["runtime threat detection"],
+        "metric": "relative_demand_index",
+        "source": "Cloud Security Alliance (Q3 2024)",
+        "source_type": "DERIVED",
+        "date": "2024-Q3",
+        "confidence": 0.85
+      }
+    ]
+  }
+}

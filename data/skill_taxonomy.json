@@ -1,0 +1,141 @@
+{
+  "categories": [
+    {
+      "name": "Programming Languages",
+      "skills": [
+        {"name": "Python", "type": "LANGUAGE"},
+        {"name": "Java", "type": "LANGUAGE"},
+        {"name": "C++", "type": "LANGUAGE"},
+        {"name": "JavaScript", "type": "LANGUAGE"}
+      ]
+    },
+    {
+      "name": "Frameworks",
+      "skills": [
+        {"name": "React", "type": "FRAMEWORK"},
+        {"name": "Django", "type": "FRAMEWORK"},
+        {"name": "Spring", "type": "FRAMEWORK"}
+      ]
+    },
+    {
+      "name": "Databases",
+      "skills": [
+        {"name": "SQL", "type": "LANGUAGE"},
+        {"name": "PostgreSQL", "type": "TOOL"},
+        {"name": "MySQL", "type": "TOOL"},
+        {"name": "MongoDB", "type": "TOOL"}
+      ]
+    },
+    {
+      "name": "CS Fundamentals",
+      "skills": [
+        {"name": "Data Structures and Algorithms", "type": "CONCEPT", "aliases": ["DSA"]},
+        {"name": "Operating Systems", "type": "CONCEPT", "aliases": ["OS"]},
+        {"name": "DBMS", "type": "CONCEPT", "aliases": ["Database Management Systems", "Database Management System"]},
+        {"name": "Computer Networks", "type": "CONCEPT", "aliases": ["CN"]},
+        {"name": "Computer Architecture", "type": "CONCEPT", "aliases": ["Computer Organization", "Computer Organization and Architecture", "COA"]}
+      ]
+    },
+    {
+      "name": "Cloud",
+      "skills": [
+        {"name": "AWS", "type": "PLATFORM", "aliases": ["Amazon Web Services"]},
+        {"name": "Azure", "type": "PLATFORM", "aliases": ["Microsoft Azure"]},
+        {"name": "GCP", "type": "PLATFORM", "aliases": ["Google Cloud Platform"]}
+      ]
+    },
+    {
+      "name": "Cloud Security",
+      "skills": [
+        {"name": "AWS IAM", "type": "DOMAIN", "aliases": ["IAM", "Identity and Access Management"]},
+        {"name": "KMS", "type": "TOOL", "aliases": ["Key Management Service"]},
+        {"name": "CloudTrail", "type": "TOOL", "aliases": ["AWS CloudTrail"]},
+        {"name": "Security Groups", "type": "DOMAIN"}
+      ]
+    },
+    {
+      "name": "Containers",
+      "skills": [
+        {"name": "Docker", "type": "TOOL"},
+        {"name": "Kubernetes", "type": "PLATFORM", "aliases": ["K8s"]}
+      ]
+    },
+    {
+      "name": "Infrastructure / IaC",
+      "skills": [
+        {"name": "Terraform", "type": "TOOL"},
+        {"name": "CloudFormation", "type": "TOOL", "aliases": ["AWS CloudFormation"]},
+        {"name": "Infrastructure as Code", "type": "DOMAIN", "aliases": ["IaC"]}
+      ]
+    },
+    {
+      "name": "Security Tools",
+      "skills": [
+        {"name": "Trivy", "type": "TOOL"},
+        {"name": "Falco", "type": "TOOL"},
+        {"name": "Wireshark", "type": "TOOL"},
+        {"name": "SIEM", "type": "TOOL", "aliases": ["SIEM tools", "Security Information and Event Management"]},
+        {"name": "Wazuh", "type": "TOOL"},
+        {"name": "Splunk", "type": "TOOL"},
+        {"name": "Suricata", "type": "TOOL"},
+        {"name": "ELK Stack", "type": "TOOL", "aliases": ["Elasticsearch", "Logstash", "Kibana"]}
+      ]
+    },
+    {
+      "name": "Security Domains",
+      "skills": [
+        {"name": "SOC", "type": "DOMAIN", "aliases": ["Security Operations Center"]},
+        {"name": "MITRE ATT&CK", "type": "DOMAIN", "aliases": ["ATT&CK"]},
+        {"name": "Incident Response", "type": "DOMAIN"},
+        {"name": "Threat Intelligence", "type": "DOMAIN"},
+        {"name": "Vulnerability Management", "type": "DOMAIN"},
+        {"name": "Penetration Testing", "type": "DOMAIN", "aliases": ["Pen Testing", "Ethical Hacking"]},
+        {"name": "Digital Forensics", "type": "DOMAIN"},
+        {"name": "Application Security", "type": "DOMAIN", "aliases": ["AppSec"]}
+      ]
+    },
+    {
+      "name": "Development",
+      "skills": [
+        {"name": "Git", "type": "TOOL"},
+        {"name": "REST APIs", "type": "DOMAIN", "aliases": ["REST", "RESTful APIs", "API Development"]},
+        {"name": "Testing", "type": "DOMAIN", "aliases": ["Unit Testing", "Integration Testing", "Automated Testing"]},
+        {"name": "CI/CD", "type": "DOMAIN", "aliases": ["Continuous Integration", "Continuous Delivery"]},
+        {"name": "Linux", "type": "PLATFORM"}
+      ]
+    },
+    {
+      "name": "Data / AI",
+      "skills": [
+        {"name": "Machine Learning", "type": "DOMAIN", "aliases": ["ML"]},
+        {"name": "Deep Learning", "type": "DOMAIN", "aliases": ["DL", "Neural Networks"]},
+        {"name": "Data Science", "type": "DOMAIN"},
+        {"name": "MLOps", "type": "DOMAIN", "aliases": ["Machine Learning Operations"]},
+        {"name": "Pandas", "type": "FRAMEWORK"},
+        {"name": "TensorFlow", "type": "FRAMEWORK"}
+      ]
+    },
+    {
+      "name": "Networking",
+      "skills": [
+        {"name": "TCP/IP", "type": "DOMAIN"},
+        {"name": "OSI Model", "type": "CONCEPT"},
+        {"name": "IDS/IPS", "type": "TOOL"}
+      ]
+    },
+    {
+      "name": "Soft Skills",
+      "skills": [
+        {"name": "Communication", "type": "SOFT_SKILL"},
+        {"name": "Teamwork", "type": "SOFT_SKILL"}
+      ]
+    },
+    {
+      "name": "Certifications",
+      "skills": [
+        {"name": "Cloud Certifications", "type": "CERTIFICATION"},
+        {"name": "Security Certifications", "type": "CERTIFICATION"}
+      ]
+    }
+  ]
+}
