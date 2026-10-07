@@ -181,7 +181,6 @@ sas_data = get_active_sas_data()
 # GLOBAL HEADER
 # -----------------------------------------------------------------------------------------
 render_shell_header(
-    eyebrow="VICTUS DATA SCIENCE CAREER INTELLIGENCE & DECISION-SUPPORT SYSTEM",
     title="Evidence-Grounded Resume Analysis & Career Navigation",
     subtitle="Deterministic extraction, 5-factor requirement matching, SAS market evidence integration, and actionable learning roadmaps.",
     telemetry_items=[

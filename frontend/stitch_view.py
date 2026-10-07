@@ -43,7 +43,6 @@ def render_shell_header(
     render_html(
         f"""
         <div class="console-header animate-fade-in">
-            <div class="console-eyebrow">{escape(eyebrow)}</div>
             <h1 style="margin: 0.25rem 0 0.4rem; color: {TOKENS['text']}; font-size: 1.85rem; font-weight: 700;">{escape(title)}</h1>
             <div class="console-subtitle">{escape(subtitle)}</div>
             {telemetry_html}

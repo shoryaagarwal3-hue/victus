@@ -71,6 +71,11 @@ def inject_css() -> None:
         font-family: var(--font-primary) !important;
         -webkit-font-smoothing: antialiased;
     }}
+
+    /* Hide default Streamlit top decoration line */
+    [data-testid="stDecoration"] {{
+        display: none !important;
+    }}
     
     /* Sidebar Command Rail */
     [data-testid="stSidebar"] {{
