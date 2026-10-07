@@ -14,21 +14,21 @@ def test_sas_streamlit_app_startup():
     assert len(at.exception) == 0, f"App threw exception on startup: {[e.value for e in at.exception]}"
     
     # Verify title text is present
-    assert any("SAS DATA SCIENCE CAREER INTELLIGENCE" in t.value for t in at.markdown)
+    assert any("VICTUS DATA SCIENCE CAREER INTELLIGENCE" in t.value for t in at.markdown)
 
 
 @pytest.mark.parametrize("page_name", [
-    "📄 Resume Scanner & Parser",
-    "🎯 Job Match & Requirement Fit",
-    "🔍 Skill Gap & Prioritization",
-    "🗺️ Actionable Learning Roadmap",
-    "💡 Resume Improvement Tips",
-    "📊 SAS Market Intelligence",
-    "📈 JDS Technical Skill Analytics",
-    "🧠 SDS Personality Analytics",
-    "🤖 ML Benchmarks & Validation",
-    "📑 Audit Report & PDF Export",
-    "⚙️ Settings & System Health",
+    "Resume Scanner & Parser",
+    "Job Match & Requirement Fit",
+    "Skill Gap & Prioritization",
+    "Actionable Learning Roadmap",
+    "Resume Improvement Tips",
+    "SAS Market Intelligence",
+    "JDS Technical Skill Analytics",
+    "SDS Personality Analytics",
+    "ML Benchmarks & Validation",
+    "Audit Report & PDF Export",
+    "Settings & System Health",
 ])
 def test_sas_streamlit_page_navigation(page_name):
     """Verify each page renders without throwing exceptions."""
@@ -37,4 +37,3 @@ def test_sas_streamlit_page_navigation(page_name):
     assert len(at.exception) == 0
     at.sidebar.radio[0].set_value(page_name).run()
     assert len(at.exception) == 0, f"Page '{page_name}' threw exception: {[e.value for e in at.exception]}"
-
