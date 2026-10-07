@@ -15,6 +15,15 @@ import streamlit as st
 
 from frontend.ui_theme import inject_css, TOKENS
 from frontend.ui_components import kpi, badge, quadrant_badge, executive_banner
+from frontend.stitch_view import (
+    render_shell_header,
+    render_active_profile_card,
+    render_analytical_panel_header,
+    render_priority_gap_card,
+    render_resume_tip_card,
+    render_roadmap_phase_card,
+    render_dataset_profile_card,
+)
 from backend.resume_models import CompleteResumeAnalysisBundle, ParsedResume, JobDescriptionRequirement
 from backend.resume_pipeline import analyze_candidate_resume, get_cached_sas_pipeline_result
 from backend.job_matcher import STANDARD_ROLES
@@ -142,22 +151,6 @@ st.sidebar.markdown(
     unsafe_allow_html=True,
 )
 
-# -----------------------------------------------------------------------------------------
-# GLOBAL HEADER
-# -----------------------------------------------------------------------------------------
-st.markdown(
-    """
-    <div class="console-header">
-        <div class="console-eyebrow">VICTUS DATA SCIENCE CAREER INTELLIGENCE & DECISION-SUPPORT SYSTEM</div>
-        <h1 style="margin:0.25rem 0 0.5rem; color:#E6E9EF;">Evidence-Grounded Resume Analysis & Career Navigation</h1>
-        <div class="console-subtitle">
-            Deterministic extraction, 5-factor requirement matching, SAS market evidence integration, and actionable learning roadmaps.
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
 # Initialize Session State
 if "active_resume_name" not in st.session_state:
     st.session_state["active_resume_name"] = "Alex Chen (Junior Data Scientist Sample)"
@@ -176,74 +169,67 @@ if "analysis_bundle" not in st.session_state:
 bundle: CompleteResumeAnalysisBundle = st.session_state["analysis_bundle"]
 sas_data = get_active_sas_data()
 
+# -----------------------------------------------------------------------------------------
+# GLOBAL HEADER
+# -----------------------------------------------------------------------------------------
+render_shell_header(
+    eyebrow="VICTUS DATA SCIENCE CAREER INTELLIGENCE & DECISION-SUPPORT SYSTEM",
+    title="Evidence-Grounded Resume Analysis & Career Navigation",
+    subtitle="Deterministic extraction, 5-factor requirement matching, SAS market evidence integration, and actionable learning roadmaps.",
+    telemetry_items=[
+        ("ACTIVE TARGET ROLE", selected_role),
+        ("ENGINE", "Deterministic V3.0"),
+        ("DATASETS", "4 Official SAS Files (N=17,443)"),
+        ("RUNTIME", "100% Deterministic Local"),
+    ],
+)
 
+
+
+# -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 # PAGE 1: RESUME SCANNER & PARSER
 # -----------------------------------------------------------------------------------------
 if nav_selection == "Resume Scanner & Parser":
-    st.markdown("### RESUME UPLOAD & DOCUMENT EXTRACTION")
-    st.markdown(
-        "Upload a candidate resume to extract structured technical skills, benchmark against industry roles, "
-        "evaluate SAS market frequencies and career-outcome evidence, and generate an actionable learning roadmap."
+    render_analytical_panel_header(
+        title="RESUME UPLOAD & DOCUMENT EXTRACTION WORKSTATION",
+        subtitle="Deterministic extraction, 5-factor requirement matching, SAS market evidence integration, and actionable learning roadmaps.",
+        badge_text="ENGINE: DETERMINISTIC V3.0",
+        badge_type="VERIFIED",
     )
     
-    # Active Resume Indicator Banner
-    active_name = st.session_state.get("active_resume_name", "")
-    active_source = st.session_state.get("active_resume_source", "")
+    # Active Resume Indicator Card
+    active_name = st.session_state.get("active_resume_name", "Alex Chen (Junior Data Scientist Sample)")
+    active_source = st.session_state.get("active_resume_source", "sample")
+    active_bytes = st.session_state.get("active_resume_bytes")
+    file_size_kb = round(len(active_bytes) / 1024, 1) if active_bytes else None
     
-    if active_name:
-        if active_source == "uploaded":
-            st.markdown(
-                f"""
-                <div style="background: rgba(61, 220, 151, 0.08); border: 1px solid #3DDC97; border-radius: 4px; padding: 0.85rem 1.25rem; margin: 0.75rem 0 1.25rem;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
-                        <div>
-                            <span style="color: #3DDC97; font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;">ACTIVE RESUME</span>
-                            <div style="color: #E6E9EF; font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; margin-top: 0.15rem;">[LOADED] {html.escape(active_name)}</div>
-                        </div>
-                        <div style="background: #141922; border: 1px solid #3DDC97; color: #3DDC97; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 2px;">
-                            STATUS: VERIFIED & ANALYZED
-                        </div>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        else:
-            st.markdown(
-                f"""
-                <div style="background: rgba(138, 200, 255, 0.08); border: 1px solid #8AC8FF; border-radius: 4px; padding: 0.85rem 1.25rem; margin: 0.75rem 0 1.25rem;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
-                        <div>
-                            <span style="color: #8AC8FF; font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;">ACTIVE DEMO SAMPLE</span>
-                            <div style="color: #E6E9EF; font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; margin-top: 0.15rem;">[SAMPLE] {html.escape(active_name)}</div>
-                        </div>
-                        <div style="background: #141922; border: 1px solid #8AC8FF; color: #8AC8FF; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 2px;">
-                            DEMO BENCHMARK
-                        </div>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-    else:
-        st.markdown(
-            """
-            <div style="background: rgba(255, 92, 92, 0.08); border: 1px solid #FF5C5C; border-radius: 4px; padding: 0.85rem 1.25rem; margin: 0.75rem 0 1.25rem;">
-                <span style="color: #FF5C5C; font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700;">NO ACTIVE RESUME</span>
-                <div style="color: #8A93A6; font-size: 0.95rem; margin-top: 0.15rem;">Please upload and load your resume below, or select a demo sample to begin.</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    res = bundle.parsed_resume
+    render_active_profile_card(
+        name=active_name,
+        source_type=active_source,
+        file_size_kb=file_size_kb,
+        total_skills=len(res.extracted_skills),
+        total_projects=len(res.projects),
+        total_exp_years=res.total_experience_years,
+        match_score=bundle.match_result.overall_match_score,
+        core_gaps=bundle.match_result.missing_required_count,
+    )
 
     # 2 Column layout: Left = Resume Upload & Samples | Right = Custom JD & Analysis Trigger
     col_upload, col_role = st.columns([3, 2], gap="large")
     
     with col_upload:
-        st.markdown("#### CANDIDATE RESUME SOURCE")
+        st.markdown(
+            f"""
+            <div style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: {TOKENS['info']}; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">
+                [WORKSTATION INPUT] CANDIDATE RESUME SOURCE
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         uploaded_file = st.file_uploader(
-            "Upload Resume (PDF, DOCX, or TXT)",
+            "Upload Resume Document (PDF, DOCX, or TXT)",
             type=["pdf", "docx", "txt"],
             key="resume_uploader_widget",
             help="Deterministic parser extracts contact info, education, experience, projects, and skills without external LLM calls.",
@@ -251,20 +237,20 @@ if nav_selection == "Resume Scanner & Parser":
         
         if uploaded_file is not None:
             file_bytes_raw = uploaded_file.getvalue()
-            file_size_kb = round(len(file_bytes_raw) / 1024, 1)
+            f_size_kb = round(len(file_bytes_raw) / 1024, 1)
             
             st.markdown(
                 f"""
-                <div style="background: #141922; border: 1px solid #232937; border-radius: 4px; padding: 0.85rem 1rem; margin-bottom: 0.75rem;">
-                    <div style="color: #3DDC97; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700;">[FILE READY]</div>
-                    <div style="color: #E6E9EF; font-weight: 600; margin-top: 0.2rem;">{html.escape(uploaded_file.name)}</div>
-                    <div style="color: #8A93A6; font-family: 'Space Mono', monospace; font-size: 0.78rem; margin-top: 0.1rem;">Size: {file_size_kb} KB</div>
+                <div style="background: {TOKENS['surface_alt']}; border: 1px solid {TOKENS['stable']}; border-radius: 4px; padding: 0.85rem 1rem; margin-bottom: 0.75rem;">
+                    <div style="color: {TOKENS['stable']}; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700;">[FILE READY FOR ANALYSIS]</div>
+                    <div style="color: {TOKENS['text']}; font-weight: 700; margin-top: 0.2rem; font-family: 'Space Grotesk', sans-serif;">{html.escape(uploaded_file.name)}</div>
+                    <div style="color: {TOKENS['muted']}; font-family: 'Space Mono', monospace; font-size: 0.75rem; margin-top: 0.1rem;">Size: {f_size_kb} KB | Deterministic Parser Armed</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
             
-            if st.button("LOAD UPLOADED RESUME", type="primary", use_container_width=True, key="btn_load_real_resume"):
+            if st.button("LOAD & ANALYZE UPLOADED RESUME", type="primary", use_container_width=True, key="btn_load_real_resume"):
                 try:
                     st.session_state["active_resume_bytes"] = file_bytes_raw
                     st.session_state["active_resume_name"] = uploaded_file.name
@@ -284,15 +270,22 @@ if nav_selection == "Resume Scanner & Parser":
                 except Exception as exc:
                     st.error(f"Unable to load this resume: {exc}. Please try another file.")
         else:
-            st.caption("Supported formats: **PDF** | **DOCX** | **TXT** (Deterministic parsing | 100% Offline)")
+            st.caption("Supported formats: **PDF** | **DOCX** | **TXT** (Deterministic parsing | 100% Offline Local)")
             
-        st.markdown("---")
-        st.markdown("#### REFERENCE DEMO PROFILES")
-        st.caption("Inspect the system immediately using pre-loaded reference profiles:")
+        st.markdown(
+            f"""
+            <div style="margin: 1.25rem 0 0.5rem; border-top: 1px solid {TOKENS['border']}; padding-top: 1rem;">
+                <div style="font-family: 'Space Mono', monospace; font-size: 0.72rem; color: {TOKENS['muted']}; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">
+                    [ONE-CLICK BENCHMARKS] REFERENCE DEMO PROFILES
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         
         c_btn1, c_btn2 = st.columns(2)
         with c_btn1:
-            if st.button("Load Sample: Junior Data Scientist", use_container_width=True, key="btn_load_sample_jds"):
+            if st.button("Load JDS Sample Profile", use_container_width=True, key="btn_load_sample_jds"):
                 sample_bytes = SAMPLE_RESUME_JDS.encode("utf-8")
                 st.session_state["active_resume_bytes"] = sample_bytes
                 st.session_state["active_resume_name"] = "Alex Chen (Junior Data Scientist Sample)"
@@ -311,7 +304,7 @@ if nav_selection == "Resume Scanner & Parser":
                 st.rerun()
                 
         with c_btn2:
-            if st.button("Load Sample: Business Analytics Specialist", use_container_width=True, key="btn_load_sample_analyst"):
+            if st.button("Load Analyst Sample Profile", use_container_width=True, key="btn_load_sample_analyst"):
                 sample_bytes = SAMPLE_RESUME_ANALYST.encode("utf-8")
                 st.session_state["active_resume_bytes"] = sample_bytes
                 st.session_state["active_resume_name"] = "Sarah Jenkins (Business Analytics Sample)"
@@ -330,7 +323,14 @@ if nav_selection == "Resume Scanner & Parser":
                 st.rerun()
 
     with col_role:
-        st.markdown("#### TARGET ROLE & JOB DESCRIPTION")
+        st.markdown(
+            f"""
+            <div style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: {TOKENS['info']}; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">
+                [TARGET SPECIFICATION] ROLE & JD BENCHMARK
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         st.markdown(f"**Target Role Benchmark:** `{selected_role}`")
         
         custom_jd = st.text_area(
@@ -343,7 +343,7 @@ if nav_selection == "Resume Scanner & Parser":
         st.session_state["custom_jd_input_text"] = custom_jd
         
         has_active_resume = st.session_state.get("active_resume_bytes") is not None
-        btn_label = "ANALYZE RESUME" if st.session_state.get("analysis_bundle") is None else "RE-ANALYZE ACTIVE RESUME"
+        btn_label = "RE-EVALUATE ACTIVE RESUME" if has_active_resume else "ANALYZE RESUME"
         
         if has_active_resume:
             if st.button(btn_label, type="primary", use_container_width=True, key="btn_analyze_action"):
@@ -360,30 +360,16 @@ if nav_selection == "Resume Scanner & Parser":
                 except Exception as exc:
                     st.error(f"Analysis error: {exc}")
         else:
-            if uploaded_file is not None:
-                st.info("File selected. Click **LOAD UPLOADED RESUME** on the left to load before analyzing.")
-            else:
-                st.info("Please upload and load a resume, or select a demo sample to enable analysis.")
-
-    st.markdown("---")
-    
-    # Overview of Extracted Profile
-    res = bundle.parsed_resume
-    st.markdown(f"#### EXTRACTED PROFILE: **{res.contact.name}**")
-    
-    k1, k2, k3, k4, k5 = st.columns(5)
-    with k1:
-        kpi("Resume Match Score", bundle.match_result.overall_match_score, TOKENS["stable"], "%")
-    with k2:
-        kpi("Extracted Skills", float(len(res.extracted_skills)), TOKENS["info"], " skills")
-    with k3:
-        kpi("Projects Evidenced", float(len(res.projects)), TOKENS["purple"], " projects")
-    with k4:
-        kpi("Detected Experience", res.total_experience_years, TOKENS["warning"], " yrs")
-    with k5:
-        kpi("Missing Core Gaps", float(bundle.match_result.missing_required_count), TOKENS["danger"], " gaps")
+            st.info("Please upload and load a resume, or select a demo sample to enable analysis.")
 
     # Extracted Details Tabs
+    render_analytical_panel_header(
+        title=f"EXTRACTED RESUME EVIDENCE: {res.contact.name}",
+        subtitle="Structured telemetry parsed deterministically from candidate resume.",
+        badge_text="PARSER: DETERMINISTIC",
+        badge_type="DERIVED",
+    )
+    
     t_skills, t_exp, t_proj, t_raw = st.tabs(["Extracted Skills", "Work Experience", "Projects Portfolio", "Raw Text View"])
     
     with t_skills:
@@ -402,20 +388,39 @@ if nav_selection == "Resume Scanner & Parser":
     with t_exp:
         if res.experience:
             for exp in res.experience:
-                st.markdown(f"**{exp.role}** at *{exp.organization}* ({exp.duration})")
-                for r in exp.responsibilities:
-                    st.markdown(f"- {r}")
+                st.markdown(
+                    f"""
+                    <div class="console-card" style="border-left: 3px solid {TOKENS['info']}; margin-bottom: 0.75rem;">
+                        <div style="font-size: 1.05rem; font-weight: 700; color: {TOKENS['text']}; font-family: 'Space Grotesk', sans-serif;">
+                            {html.escape(exp.role)} <span style="color: {TOKENS['muted']}; font-size: 0.85rem; font-weight: 400;">at {html.escape(exp.organization)} ({html.escape(exp.duration)})</span>
+                        </div>
+                        <ul style="margin: 0.5rem 0 0 1.25rem; padding: 0; font-size: 0.88rem; color: {TOKENS['text']}; line-height: 1.5;">
+                            {''.join(f'<li>{html.escape(r)}</li>' for r in exp.responsibilities)}
+                        </ul>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
         else:
             st.info("No employment history entries detected.")
             
     with t_proj:
         if res.projects:
             for p in res.projects:
-                st.markdown(f"**[PROJECT] {p.title}**")
-                st.markdown(f"{p.description}")
-                if p.measurable_outcomes:
-                    st.markdown(f"**Measurable Metrics:** `{', '.join(p.measurable_outcomes)}`")
-                st.markdown("---")
+                st.markdown(
+                    f"""
+                    <div class="console-card" style="border-left: 3px solid {TOKENS['purple']}; margin-bottom: 0.75rem;">
+                        <div style="font-size: 1.05rem; font-weight: 700; color: {TOKENS['text']}; font-family: 'Space Grotesk', sans-serif;">
+                            [PROJECT] {html.escape(p.title)}
+                        </div>
+                        <div style="color: {TOKENS['text']}; font-size: 0.88rem; margin: 0.4rem 0 0.5rem; line-height: 1.5;">
+                            {html.escape(p.description)}
+                        </div>
+                        {'<div style="font-family: \'Space Mono\', monospace; font-size: 0.78rem; color: ' + TOKENS['stable'] + ';"><strong>Measurable Outcomes:</strong> ' + html.escape(', '.join(p.measurable_outcomes)) + '</div>' if p.measurable_outcomes else ''}
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
         else:
             st.info("No projects detected.")
             
@@ -428,23 +433,35 @@ if nav_selection == "Resume Scanner & Parser":
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "Job Match & Requirement Fit":
     match = bundle.match_result
-    st.markdown(f"### RESUME-TO-ROLE MATCH ANALYSIS: **{match.target_role}**")
+    render_analytical_panel_header(
+        title=f"RESUME-TO-ROLE 5-FACTOR MATCH: {match.target_role}",
+        subtitle="Deterministic multi-factor scoring against industry qualifications and empirical SAS market demands.",
+        badge_text="5-FACTOR WEIGHTED",
+        badge_type="VERIFIED",
+    )
     
-    m_col1, m_col2 = st.columns([2, 3])
+    m_col1, m_col2 = st.columns([2, 3], gap="large")
     
     with m_col1:
-        st.markdown("#### COMPOSITE MATCH BREAKDOWN")
-        for dim, score in match.scoring_formula_breakdown.items():
-            if "Composite" in dim:
-                st.markdown(f"**{dim}**: <span style='color:#3DDC97; font-family:Space Mono; font-size:1.4rem; font-weight:700;'>{score:.1f}%</span>", unsafe_allow_html=True)
-            else:
-                st.progress(score / 100.0, text=f"{dim}: {score:.1f}%")
-                
         st.markdown(
-            """
-            > **Auditable Scoring Standard**:
-            > $$\text{Score} = 0.50 \times \text{Req} + 0.20 \times \text{Pref} + 0.15 \times \text{Proj} + 0.10 \times \text{Exp} + 0.05 \times \text{Edu}$$
-            """
+            f"""
+            <div class="console-card">
+                <div style="font-family: 'Space Mono', monospace; font-size: 0.72rem; color: {TOKENS['muted']}; font-weight: 700; text-transform: uppercase;">
+                    [COMPOSITE SCORING FORMULA]
+                </div>
+                <div style="font-size: 2.25rem; font-weight: 700; color: {TOKENS['stable']}; font-family: 'Space Mono', monospace; margin: 0.35rem 0 1rem;">
+                    {match.overall_match_score:.1f}%
+                </div>
+                <div style="font-size: 0.85rem; color: {TOKENS['muted']}; line-height: 1.6; border-top: 1px solid {TOKENS['border']}; padding-top: 0.75rem;">
+                    <div>Required Skills (50%): <strong style="color:{TOKENS['text']};">{match.required_skill_match_pct:.1f}%</strong></div>
+                    <div>Preferred Skills (20%): <strong style="color:{TOKENS['text']};">{match.preferred_skill_match_pct:.1f}%</strong></div>
+                    <div>Project Evidence (15%): <strong style="color:{TOKENS['text']};">{match.project_evidence_score:.1f}%</strong></div>
+                    <div>Experience Fit (10%): <strong style="color:{TOKENS['text']};">{match.experience_fit_score:.1f}%</strong></div>
+                    <div>Education Fit (5%): <strong style="color:{TOKENS['text']};">{match.education_fit_score:.1f}%</strong></div>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
     with m_col2:
@@ -464,26 +481,30 @@ elif nav_selection == "Job Match & Requirement Fit":
             theta=categories + [categories[0]],
             fill="toself",
             name="Candidate Fit",
-            line_color="#3DDC97",
-            fillcolor="rgba(61, 220, 151, 0.20)",
+            line_color=TOKENS["stable"],
+            fillcolor="rgba(61, 220, 151, 0.18)",
         ))
         
         fig_radar.update_layout(
             polar=dict(
-                bgcolor="#10141D",
-                radialaxis=dict(visible=True, range=[0, 100], gridcolor="#232937", tickfont=dict(family="Space Mono", color="#8A93A6")),
-                angularaxis=dict(gridcolor="#232937", tickfont=dict(family="Space Grotesk", color="#E6E9EF"))
+                bgcolor=TOKENS["surface_alt"],
+                radialaxis=dict(visible=True, range=[0, 100], gridcolor=TOKENS["border"], tickfont=dict(family="Space Mono", color=TOKENS["muted"])),
+                angularaxis=dict(gridcolor=TOKENS["border"], tickfont=dict(family="Space Grotesk", color=TOKENS["text"]))
             ),
             showlegend=False,
             margin=dict(l=40, r=40, t=30, b=30),
-            paper_bgcolor="#141922",
-            font_color="#E6E9EF",
+            paper_bgcolor=TOKENS["surface"],
+            font_color=TOKENS["text"],
             height=320,
         )
         st.plotly_chart(fig_radar, use_container_width=True)
 
-    st.markdown("---")
-    st.markdown("#### SKILL-BY-SKILL REQUIREMENT COMPARISON")
+    render_analytical_panel_header(
+        title="SKILL-BY-SKILL REQUIREMENT COMPARISON MATRIX",
+        subtitle="Individual evaluation of every core requirement against candidate profile evidence.",
+        badge_text="FULL AUDIT",
+        badge_type="DERIVED",
+    )
     
     match_table_data = []
     for d in match.all_skill_details:
@@ -503,43 +524,27 @@ elif nav_selection == "Job Match & Requirement Fit":
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "Skill Gap & Prioritization":
     gaps = bundle.priority_gaps
-    st.markdown("### MULTI-FACTOR SKILL GAP PRIORITIZATION")
-    st.markdown(
-        "Gaps are prioritized into **HIGH**, **MEDIUM**, and **LOW** based on Role Requirements, "
-        "SAS Market Postings (N=17,443), and JDS Statistical Salary-Hike Significance."
+    render_analytical_panel_header(
+        title="MULTI-FACTOR SKILL GAP DIAGNOSTICS & PRIORITIZATION",
+        subtitle="Gaps prioritized into High, Medium, and Low using SAS Market demand (N=17,443) and statistical JDS salary-hike significance.",
+        badge_text=f"{len(gaps)} DEFICITS IDENTIFIED",
+        badge_type="CRITICAL" if len(gaps) > 3 else "HIGH",
     )
     
     if not gaps:
         st.success("No critical skill gaps detected for this role specification.")
     else:
         for g in gaps:
-            badge_type = "critical" if g.priority_level == "HIGH" else ("high" if g.priority_level == "MEDIUM" else "low")
-            
-            with st.container():
-                st.markdown(
-                    f"""
-                    <div style="border:1px solid #232937; background:#141922; border-radius:4px; padding:1.25rem; margin-bottom:1rem;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
-                            <div style="font-size:1.15rem; font-weight:700; color:#E6E9EF; font-family:'Space Grotesk',sans-serif;">
-                                {g.skill_name} <span style="font-size:0.8rem; color:#8A93A6; font-family:'Space Mono',monospace;">({g.category})</span>
-                            </div>
-                            <div>{badge(f"PRIORITY: {g.priority_level}", badge_type)}</div>
-                        </div>
-                        <div style="margin-top:0.6rem; font-size:0.92rem; color:#E6E9EF;">
-                            <b>Primary Justification:</b> {g.primary_reason}
-                        </div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-top:0.75rem; font-size:0.82rem; color:#8A93A6; border-top:1px solid #232937; padding-top:0.75rem;">
-                            <div><b>Role Requirement:</b><br><span style="color:#E6E9EF;">{g.job_requirement_evidence}</span></div>
-                            <div><b>Market Evidence:</b><br><span style="color:#E6E9EF;">{g.market_demand_evidence}</span></div>
-                            <div><b>JDS Career Evidence:</b><br><span style="color:#E6E9EF;">{g.jds_career_outcome_evidence}</span></div>
-                        </div>
-                        <div style="margin-top:0.6rem; font-size:0.82rem; color:#3DDC97; font-family:'Space Mono',monospace;">
-                            ESTIMATED LEARNING EFFORT: {g.estimated_learning_effort}
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+            render_priority_gap_card(
+                skill_name=g.skill_name,
+                category=g.category,
+                priority=g.priority_level,
+                primary_reason=g.primary_reason,
+                job_req_evidence=g.job_requirement_evidence,
+                market_evidence=g.market_demand_evidence,
+                jds_evidence=g.jds_career_outcome_evidence,
+                learning_effort=g.estimated_learning_effort,
+            )
 
 
 # -----------------------------------------------------------------------------------------
@@ -547,48 +552,32 @@ elif nav_selection == "Skill Gap & Prioritization":
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "Actionable Learning Roadmap":
     roadmaps = bundle.learning_roadmaps
-    st.markdown("### ACTIONABLE STEP-BY-STEP LEARNING ROADMAPS")
-    st.markdown(
-        "Structured learning pathways designed to close each identified skill deficit through "
-        "**Foundational Study -> Guided Practice -> Enterprise Portfolio Project -> Validation**."
+    render_analytical_panel_header(
+        title="ACTIONABLE STEP-BY-STEP LEARNING ROADMAPS",
+        subtitle="Structured learning pathways designed to close each identified deficit through Foundational Study -> Guided Practice -> Enterprise Portfolio Project -> Validation.",
+        badge_text="DETERMINISTIC CURRICULUM",
+        badge_type="DERIVED",
     )
     
     if not roadmaps:
         st.info("No skill gaps requiring roadmaps.")
     else:
         for idx, rm in enumerate(roadmaps):
-            with st.expander(f"Phase {idx+1}: Mastery Roadmap for {rm.skill_name} [{rm.priority} Priority]", expanded=(idx == 0)):
-                st.markdown(f"**Why This Matters:** {rm.why_it_matters}")
-                st.markdown(f"**Prerequisites:** `{', '.join(rm.prerequisites)}`")
-                
-                c_topics1, c_topics2, c_topics3 = st.columns(3)
-                with c_topics1:
-                    st.markdown("**1. Foundation Phase**")
-                    for t in rm.foundation_topics:
-                        st.markdown(f"- {t}")
-                with c_topics2:
-                    st.markdown("**2. Intermediate Phase**")
-                    for t in rm.intermediate_topics:
-                        st.markdown(f"- {t}")
-                with c_topics3:
-                    st.markdown("**3. Advanced / Production Phase**")
-                    for t in rm.advanced_topics:
-                        st.markdown(f"- {t}")
-                        
-                st.markdown("---")
-                p_col1, p_col2 = st.columns(2)
-                with p_col1:
-                    st.markdown("##### Guided Practice Tasks")
-                    for pt in rm.practice_tasks:
-                        st.markdown(f"- {pt}")
-                    st.markdown(f"**Mini-Project:** {rm.mini_project}")
-                with p_col2:
-                    st.markdown("##### Main Portfolio Capstone Project")
-                    st.markdown(f"**Project Concept:** {rm.main_portfolio_project}")
-                    st.markdown(f"**Validation Milestone:** `{rm.validation_milestone}`")
-                    
-                st.markdown("##### Target Resume Bullet Point Template")
-                st.code(rm.resume_bullet_template, language="markdown")
+            render_roadmap_phase_card(
+                phase_num=idx + 1,
+                skill_name=rm.skill_name,
+                priority=rm.priority,
+                why_it_matters=rm.why_it_matters,
+                prerequisites=rm.prerequisites,
+                foundation_topics=rm.foundation_topics,
+                intermediate_topics=rm.intermediate_topics,
+                advanced_topics=rm.advanced_topics,
+                practice_tasks=rm.practice_tasks,
+                mini_project=rm.mini_project,
+                capstone_project=rm.main_portfolio_project,
+                validation_milestone=rm.validation_milestone,
+                resume_bullet_template=rm.resume_bullet_template,
+            )
 
 
 # -----------------------------------------------------------------------------------------
@@ -596,31 +585,21 @@ elif nav_selection == "Actionable Learning Roadmap":
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "Resume Improvement Tips":
     tips = bundle.resume_improvement_tips
-    st.markdown("### CONCRETE RESUME BULLET & CONTENT IMPROVEMENTS")
-    st.markdown("Actionable recommendations to enhance resume impact, evidence clarity, and ATS keyword visibility.")
+    render_analytical_panel_header(
+        title="CONCRETE RESUME BULLET & CONTENT OPTIMIZATION",
+        subtitle="Actionable recommendations to enhance resume impact, evidence clarity, and ATS keyword visibility with quantified before/after examples.",
+        badge_text="AUDIT OPTIMIZATION",
+        badge_type="DERIVED",
+    )
     
     for tip in tips:
-        with st.container():
-            st.markdown(
-                f"""
-                <div style="border:1px solid #232937; background:#141922; border-radius:4px; padding:1.25rem; margin-bottom:1.25rem;">
-                    <div style="font-size:1.05rem; font-weight:700; color:#3DDC97; font-family:'Space Grotesk',sans-serif;">Section: {tip.section}</div>
-                    <div style="color:#E6E9EF; margin-top:0.4rem;"><b>Observation:</b> {tip.finding_observation}</div>
-                    <div style="color:#8AC8FF; margin-top:0.4rem;"><b>Actionable Advice:</b> {tip.actionable_advice}</div>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.8rem; background:#10141D; padding:0.8rem; border-radius:4px; border:1px solid #232937;">
-                        <div>
-                            <span style="color:#FF5C5C; font-weight:700; font-family:'Space Mono',monospace; font-size:0.75rem;">[BEFORE - WEAK / VAGUE]</span>
-                            <div style="color:#8A93A6; font-size:0.88rem; margin-top:0.3rem;">"{tip.before_example}"</div>
-                        </div>
-                        <div>
-                            <span style="color:#3DDC97; font-weight:700; font-family:'Space Mono',monospace; font-size:0.75rem;">[AFTER - HIGH IMPACT / QUANTIFIED]</span>
-                            <div style="color:#E6E9EF; font-size:0.88rem; margin-top:0.3rem;">"{tip.after_example}"</div>
-                        </div>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+        render_resume_tip_card(
+            section=tip.section,
+            finding=tip.finding_observation,
+            action=tip.actionable_advice,
+            before_text=tip.before_example,
+            after_text=tip.after_example,
+        )
 
 
 # -----------------------------------------------------------------------------------------
@@ -628,24 +607,25 @@ elif nav_selection == "Resume Improvement Tips":
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "SAS Market Intelligence":
     mkt = sas_data.market_summary
-    st.markdown("### MACROECONOMIC ANALYTICS JOB MARKET LANDSCAPE")
-    st.markdown(
-        f"Empirical distributions derived from **{mkt.total_postings_analyzed:,} job postings** across "
-        f"**{mkt.unique_companies} leading organizations** (Years 2024-2025)."
+    render_analytical_panel_header(
+        title="MACROECONOMIC ANALYTICS JOB MARKET LANDSCAPE",
+        subtitle=f"Empirical distributions derived from {mkt.total_postings_analyzed:,} job postings across {mkt.unique_companies} leading organizations (Years 2024-2025).",
+        badge_text=f"N={mkt.total_postings_analyzed:,} POSTINGS",
+        badge_type="VERIFIED",
     )
     
-    col_comp, col_skills = st.columns(2)
+    col_comp, col_skills = st.columns(2, gap="large")
     
     with col_comp:
-        st.markdown("#### Top Hiring Companies by Postings")
+        st.markdown("#### Top Hiring Organizations by Posting Volume")
         comp_df = pd.DataFrame(list(mkt.top_hiring_companies.items()), columns=["Company", "Posting Count"])
-        fig_comp = px.bar(comp_df, x="Posting Count", y="Company", orientation="h", color_discrete_sequence=["#8AC8FF"])
+        fig_comp = px.bar(comp_df, x="Posting Count", y="Company", orientation="h", color_discrete_sequence=[TOKENS["info"]])
         fig_comp.update_layout(
-            yaxis=dict(autorange="reversed", gridcolor="#232937", tickfont=dict(family="Space Grotesk")),
-            xaxis=dict(gridcolor="#232937", tickfont=dict(family="Space Mono")),
-            paper_bgcolor="#141922",
-            plot_bgcolor="#10141D",
-            font_color="#E6E9EF",
+            yaxis=dict(autorange="reversed", gridcolor=TOKENS["border"], tickfont=dict(family="Space Grotesk", color=TOKENS["text"])),
+            xaxis=dict(gridcolor=TOKENS["border"], tickfont=dict(family="Space Mono", color=TOKENS["muted"])),
+            paper_bgcolor=TOKENS["surface"],
+            plot_bgcolor=TOKENS["surface_alt"],
+            font_color=TOKENS["text"],
             height=350,
             margin=dict(t=20, b=20),
         )
@@ -654,27 +634,27 @@ elif nav_selection == "SAS Market Intelligence":
     with col_skills:
         st.markdown("#### Most Frequent In-Demand Skill Mentions")
         skill_mkt_df = pd.DataFrame(list(mkt.top_key_skills.items())[:12], columns=["Skill", "Mentions"])
-        fig_skill = px.bar(skill_mkt_df, x="Mentions", y="Skill", orientation="h", color_discrete_sequence=["#3DDC97"])
+        fig_skill = px.bar(skill_mkt_df, x="Mentions", y="Skill", orientation="h", color_discrete_sequence=[TOKENS["stable"]])
         fig_skill.update_layout(
-            yaxis=dict(autorange="reversed", gridcolor="#232937", tickfont=dict(family="Space Grotesk")),
-            xaxis=dict(gridcolor="#232937", tickfont=dict(family="Space Mono")),
-            paper_bgcolor="#141922",
-            plot_bgcolor="#10141D",
-            font_color="#E6E9EF",
+            yaxis=dict(autorange="reversed", gridcolor=TOKENS["border"], tickfont=dict(family="Space Grotesk", color=TOKENS["text"])),
+            xaxis=dict(gridcolor=TOKENS["border"], tickfont=dict(family="Space Mono", color=TOKENS["muted"])),
+            paper_bgcolor=TOKENS["surface"],
+            plot_bgcolor=TOKENS["surface_alt"],
+            font_color=TOKENS["text"],
             height=350,
             margin=dict(t=20, b=20),
         )
         st.plotly_chart(fig_skill, use_container_width=True)
 
-    col_loc, col_exp = st.columns(2)
+    col_loc, col_exp = st.columns(2, gap="large")
     with col_loc:
         st.markdown("#### Top Tech Employment Clusters")
         loc_df = pd.DataFrame(list(mkt.top_locations.items()), columns=["Location", "Postings"])
-        fig_loc = px.pie(loc_df, names="Location", values="Postings", hole=0.45, color_discrete_sequence=["#3DDC97", "#8AC8FF", "#B28DFF", "#FFB86C", "#94CCFF"])
+        fig_loc = px.pie(loc_df, names="Location", values="Postings", hole=0.45, color_discrete_sequence=[TOKENS["stable"], TOKENS["info"], TOKENS["purple"], TOKENS["warning"], "#94CCFF"])
         fig_loc.update_layout(
-            paper_bgcolor="#141922",
-            plot_bgcolor="#141922",
-            font_color="#E6E9EF",
+            paper_bgcolor=TOKENS["surface"],
+            plot_bgcolor=TOKENS["surface"],
+            font_color=TOKENS["text"],
             height=300,
             margin=dict(t=20, b=20),
         )
@@ -683,13 +663,13 @@ elif nav_selection == "SAS Market Intelligence":
     with col_exp:
         st.markdown("#### Required Experience Distribution")
         exp_df = pd.DataFrame(list(mkt.experience_bands.items()), columns=["Experience Band", "Jobs"])
-        fig_exp = px.bar(exp_df, x="Experience Band", y="Jobs", color_discrete_sequence=["#B28DFF"])
+        fig_exp = px.bar(exp_df, x="Experience Band", y="Jobs", color_discrete_sequence=[TOKENS["purple"]])
         fig_exp.update_layout(
-            yaxis=dict(gridcolor="#232937", tickfont=dict(family="Space Mono")),
-            xaxis=dict(gridcolor="#232937", tickfont=dict(family="Space Grotesk")),
-            paper_bgcolor="#141922",
-            plot_bgcolor="#10141D",
-            font_color="#E6E9EF",
+            yaxis=dict(gridcolor=TOKENS["border"], tickfont=dict(family="Space Mono", color=TOKENS["muted"])),
+            xaxis=dict(gridcolor=TOKENS["border"], tickfont=dict(family="Space Grotesk", color=TOKENS["text"])),
+            paper_bgcolor=TOKENS["surface"],
+            plot_bgcolor=TOKENS["surface_alt"],
+            font_color=TOKENS["text"],
             height=300,
             margin=dict(t=20, b=20),
         )
@@ -700,10 +680,11 @@ elif nav_selection == "SAS Market Intelligence":
 # PAGE 7: JDS TECHNICAL SKILL ANALYTICS
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "JDS Technical Skill Analytics":
-    st.markdown("### JUNIOR DATA SCIENTIST TECHNICAL SKILL & SALARY-HIKE ANALYTICS")
-    st.markdown(
-        "Empirical investigation of N=139 Junior Data Scientists evaluating statistical association "
-        "between 5 technical skill dimensions (1-5 scale) and binary performance salary-hike outcomes."
+    render_analytical_panel_header(
+        title="JUNIOR DATA SCIENTIST TECHNICAL SKILL & SALARY-HIKE ANALYTICS",
+        subtitle="Empirical investigation of N=139 Junior Data Scientists evaluating statistical association between 5 technical skill dimensions (1-5 scale) and binary salary-hike outcomes.",
+        badge_text="N=139 COHORT",
+        badge_type="VERIFIED",
     )
     
     jds_stats = [t for t in sas_data.statistical_results if "salary_hike" in t.test_id]
@@ -728,21 +709,21 @@ elif nav_selection == "JDS Technical Skill Analytics":
         x=[s["Technical Skill Dimension"] for s in stat_table],
         y=[s["Low Hike Mean (0)"] for s in stat_table],
         name="Low Salary Hike (0)",
-        marker_color="#FF5C5C",
+        marker_color=TOKENS["danger"],
     ))
     fig_jds.add_trace(go.Bar(
         x=[s["Technical Skill Dimension"] for s in stat_table],
         y=[s["High Hike Mean (1)"] for s in stat_table],
         name="High Salary Hike (1)",
-        marker_color="#3DDC97",
+        marker_color=TOKENS["stable"],
     ))
     fig_jds.update_layout(
         barmode="group",
-        yaxis=dict(title="Average Skill Score (1 - 5)", gridcolor="#232937", tickfont=dict(family="Space Mono")),
-        xaxis=dict(gridcolor="#232937", tickfont=dict(family="Space Grotesk")),
-        paper_bgcolor="#141922",
-        plot_bgcolor="#10141D",
-        font_color="#E6E9EF",
+        yaxis=dict(title="Average Skill Score (1 - 5)", gridcolor=TOKENS["border"], tickfont=dict(family="Space Mono", color=TOKENS["muted"])),
+        xaxis=dict(gridcolor=TOKENS["border"], tickfont=dict(family="Space Grotesk", color=TOKENS["text"])),
+        paper_bgcolor=TOKENS["surface"],
+        plot_bgcolor=TOKENS["surface_alt"],
+        font_color=TOKENS["text"],
         height=350,
         margin=dict(t=30, b=30),
     )
@@ -753,10 +734,11 @@ elif nav_selection == "JDS Technical Skill Analytics":
 # PAGE 8: SDS PERSONALITY ANALYTICS
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "SDS Personality Analytics":
-    st.markdown("### SENIOR DATA SCIENTIST PERSONALITY TRAIT ANALYTICS")
-    st.markdown(
-        "Investigation of N=161 Senior and Customer-Facing Data Scientists examining the association "
-        "between Big Five personality dimensions (OCEAN normalized 0-100) and organizational success outcomes."
+    render_analytical_panel_header(
+        title="SENIOR DATA SCIENTIST PERSONALITY TRAIT ANALYTICS",
+        subtitle="Investigation of N=161 Senior and Customer-Facing Data Scientists examining association between Big Five personality traits (OCEAN normalized 0-100) and organizational success outcomes.",
+        badge_text="N=161 COHORT",
+        badge_type="VERIFIED",
     )
     
     sds_stats = [t for t in sas_data.statistical_results if "success_classification" in t.test_id]
@@ -779,10 +761,11 @@ elif nav_selection == "SDS Personality Analytics":
 # PAGE 9: ML BENCHMARKS & VALIDATION
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "ML Benchmarks & Validation":
-    st.markdown("### SUPERVISED MACHINE LEARNING BENCHMARKS & VALIDATION")
-    st.markdown(
-        "Rigorous comparative evaluation of classification models predicting junior salary progression "
-        "using **Stratified 5-Fold Cross-Validation** and odds-ratio explainability."
+    render_analytical_panel_header(
+        title="SUPERVISED MACHINE LEARNING BENCHMARKS & VALIDATION",
+        subtitle="Rigorous comparative evaluation of classification models predicting junior salary progression using Stratified 5-Fold Cross-Validation and odds-ratio explainability.",
+        badge_text="5-FOLD CV RIGOR",
+        badge_type="VERIFIED",
     )
     
     ml_rows = []
@@ -800,11 +783,11 @@ elif nav_selection == "ML Benchmarks & Validation":
         })
     st.dataframe(pd.DataFrame(ml_rows), use_container_width=True, hide_index=True)
     
-    col_feat, col_cm = st.columns([3, 2])
+    col_feat, col_cm = st.columns([3, 2], gap="large")
     lr_model = next((m for m in sas_data.jds_models if "Logistic Regression" in m.model_name), None)
     
     with col_feat:
-        st.markdown("#### Logistic Regression Odds Ratios")
+        st.markdown("#### Logistic Regression Odds Ratios (Effect Size per +1 Skill Score)")
         if lr_model and lr_model.feature_importances:
             fi_df = pd.DataFrame([
                 {
@@ -819,7 +802,7 @@ elif nav_selection == "ML Benchmarks & Validation":
             st.dataframe(fi_df, use_container_width=True, hide_index=True)
             
     with col_cm:
-        st.markdown("#### Test Confusion Matrix")
+        st.markdown("#### Test Confusion Matrix (N=28 Holdout)")
         if lr_model:
             cm = lr_model.confusion_matrix
             cm_df = pd.DataFrame(
@@ -828,17 +811,29 @@ elif nav_selection == "ML Benchmarks & Validation":
                 index=["Actual: Low (0)", "Actual: High (1)"],
             )
             st.dataframe(cm_df, use_container_width=True)
-            st.markdown(f"**Specificity:** `{cm.specificity*100:.1f}%` | **Negative Predictive Value:** `{cm.negative_predictive_value*100:.1f}%`")
+            st.markdown(
+                f"""
+                <div style="font-family: 'Space Mono', monospace; font-size: 0.78rem; color: {TOKENS['muted']}; margin-top: 0.5rem;">
+                    <div>Specificity: <strong style="color: {TOKENS['text']};">{cm.specificity*100:.1f}%</strong></div>
+                    <div>NPV: <strong style="color: {TOKENS['text']};">{cm.negative_predictive_value*100:.1f}%</strong></div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 
 # -----------------------------------------------------------------------------------------
 # PAGE 10: AUDIT REPORT & PDF EXPORT
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "Audit Report & PDF Export":
-    st.markdown("### FORMAL AUDIT REPORT & DOCUMENT EXPORT")
-    st.markdown("Generate and download the complete 28-section Career Intelligence Audit Report.")
+    render_analytical_panel_header(
+        title="FORMAL AUDIT REPORT & DOCUMENT EXPORT",
+        subtitle="Generate, preview, and download the complete 28-section auditable Career Intelligence Audit Report.",
+        badge_text="28 SECTIONS",
+        badge_type="VERIFIED",
+    )
     
-    c_rep1, c_rep2 = st.columns(2)
+    c_rep1, c_rep2 = st.columns(2, gap="large")
     
     report_md = generate_resume_audit_report_markdown(bundle, sas_data)
     pdf_bytes = build_pdf_audit_report(bundle)
@@ -861,8 +856,12 @@ elif nav_selection == "Audit Report & PDF Export":
             use_container_width=True,
         )
         
-    st.markdown("---")
-    st.markdown("#### Audit Report Live Preview")
+    render_analytical_panel_header(
+        title="LIVE AUDIT REPORT PREVIEW",
+        subtitle="Complete Markdown rendering of the generated report.",
+        badge_text="MARKDOWN PREVIEW",
+        badge_type="DERIVED",
+    )
     st.markdown(report_md)
 
 
@@ -870,17 +869,29 @@ elif nav_selection == "Audit Report & PDF Export":
 # PAGE 11: SETTINGS & SYSTEM HEALTH
 # -----------------------------------------------------------------------------------------
 elif nav_selection == "Settings & System Health":
-    st.markdown("### SYSTEM SETTINGS & DATA VERIFICATION")
+    render_analytical_panel_header(
+        title="SYSTEM SETTINGS & DATASET VERIFICATION",
+        subtitle="Official SAS dataset audit profiles, integrity checks, and cache controls.",
+        badge_text="SYSTEM HEALTH: 100%",
+        badge_type="VERIFIED",
+    )
     
-    st.markdown("#### SAS Datasets Verification")
+    st.markdown("#### Official SAS Datasets Verification")
     for name, prof in sas_data.data_quality_audit.dataset_profiles.items():
-        st.markdown(
-            f"- **{name}** ({prof.file_type}): `{prof.row_count:,} rows`, `{prof.column_count} columns` | "
-            f"Quality Score: **{prof.data_quality_score}/100**"
+        render_dataset_profile_card(
+            name=name,
+            file_type=prof.file_type,
+            row_count=prof.row_count,
+            col_count=prof.column_count,
+            quality_score=prof.data_quality_score,
         )
         
-    st.markdown("---")
-    st.markdown("#### Session & Cache Management")
+    render_analytical_panel_header(
+        title="SESSION & CACHE MANAGEMENT",
+        subtitle="Reset active session memory and restore default benchmark state.",
+        badge_text="MAINTENANCE",
+        badge_type="DERIVED",
+    )
     if st.button("Reset Active Resume Analysis Session", type="secondary"):
         st.session_state.pop("analysis_bundle", None)
         st.success("Session reset. Reloading default baseline.")

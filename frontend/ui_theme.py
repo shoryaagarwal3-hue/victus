@@ -1,6 +1,6 @@
 """Stitch Design System Theme & Stylesheet Definition.
 Implements the 'VICTUS Analytics Command' visual language:
-Technical Minimalist / Precision Workstation aesthetic.
+Technical Minimalist / Precision Workstation aesthetic with subtle CSS animations.
 """
 from typing import Dict
 import streamlit as st
@@ -45,6 +45,23 @@ def inject_css() -> None:
         --font-mono: 'Space Mono', monospace;
     }}
     
+    /* Animation Keyframes */
+    @keyframes fadeIn {{
+        from {{ opacity: 0; transform: translateY(4px); }}
+        to {{ opacity: 1; transform: translateY(0); }}
+    }}
+    @keyframes slideUp {{
+        from {{ opacity: 0; transform: translateY(8px); }}
+        to {{ opacity: 1; transform: translateY(0); }}
+    }}
+    
+    .animate-fade-in {{
+        animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }}
+    .animate-slide-up {{
+        animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }}
+    
     /* Base Application Canvas */
     .stApp {{
         background-color: var(--bg) !important;
@@ -70,6 +87,7 @@ def inject_css() -> None:
     .block-container {{
         max-width: 1480px !important;
         padding: 2rem 2.5rem 4rem !important;
+        animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }}
     
     /* Strict Technical Typography Hierarchy */
@@ -96,9 +114,9 @@ def inject_css() -> None:
         font-weight: 600 !important;
     }}
     h4 {{
-        font-size: 0.92rem !important;
+        font-size: 0.88rem !important;
         font-weight: 600 !important;
-        letter-spacing: 0.02em !important;
+        letter-spacing: 0.04em !important;
         text-transform: uppercase !important;
         color: var(--muted) !important;
     }}
@@ -145,7 +163,7 @@ def inject_css() -> None:
         border: 1px solid var(--border);
         background: var(--surface-alt);
         padding: 0.65rem 1.1rem;
-        margin: 1rem 0 1.5rem;
+        margin: 1rem 0 0.5rem;
         border-radius: 4px;
         font-family: var(--font-mono);
         font-size: 0.72rem;
@@ -167,10 +185,12 @@ def inject_css() -> None:
         border-radius: 4px;
         padding: 1.25rem 1.5rem;
         margin-bottom: 1rem;
-        transition: border-color 0.15s ease, transform 0.15s ease;
+        transition: border-color 0.15s ease, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
     }}
-    .console-card:hover {{
+    .console-card:hover, .animate-card-hover:hover {{
         border-color: #2E384D;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }}
     
     /* High-Density KPI Cards */
@@ -181,12 +201,13 @@ def inject_css() -> None:
         padding: 1rem 1.15rem;
         border-radius: 4px;
         min-height: 98px;
-        transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s ease;
+        transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s ease, box-shadow 0.15s ease;
     }}
     .kpi:hover {{
         transform: translateY(-2px);
         border-color: #2E384D;
         border-top-color: var(--kpi-color, var(--border));
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }}
     .kpi-label {{
         color: var(--muted);
@@ -263,30 +284,6 @@ def inject_css() -> None:
         background: rgba(61, 220, 151, 0.12);
         color: #3DDC97;
         border: 1px solid rgba(61, 220, 151, 0.35);
-    }}
-    
-    /* Executive Analytical Banner */
-    .executive-banner {{
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-left: 3px solid var(--info);
-        padding: 1.1rem 1.35rem;
-        margin: 1rem 0 1.5rem;
-        border-radius: 4px;
-    }}
-    .executive-banner-title {{
-        font-family: var(--font-mono);
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--info);
-        margin-bottom: 0.35rem;
-    }}
-    .executive-banner-text {{
-        font-size: 0.92rem;
-        line-height: 1.5;
-        color: var(--text);
     }}
     
     /* Interactive Button Styling */
