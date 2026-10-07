@@ -3,10 +3,29 @@ Implements the 'VICTUS Analytics Command' Workstation Architecture:
 High-density visual layouts, telemetry indicators, audit strips, and modular analytical panels.
 """
 from html import escape
+import re
+import textwrap
 from typing import Any, Dict, List, Optional
 import pandas as pd
 import streamlit as st
 from frontend.ui_theme import TOKENS
+
+
+def sanitize_html_for_markdown(html_str: str) -> str:
+    """Strip all leading line indentation and blank lines so CommonMark/Markdown-it never interprets HTML as indented code blocks."""
+    dedented = textwrap.dedent(html_str)
+    no_leading_spaces = "\n".join(line.lstrip() for line in dedented.splitlines() if line.strip())
+    return no_leading_spaces
+
+
+def render_html(html_str: str) -> None:
+    """Render HTML safely into Streamlit without markdown code block indentation escaping."""
+    st.markdown(sanitize_html_for_markdown(html_str), unsafe_allow_html=True)
+
+
+def render_sidebar_html(html_str: str) -> None:
+    """Render HTML safely into Streamlit Sidebar without markdown code block indentation escaping."""
+    st.sidebar.markdown(sanitize_html_for_markdown(html_str), unsafe_allow_html=True)
 
 
 def render_shell_header(
@@ -24,7 +43,7 @@ def render_shell_header(
         )
         telemetry_html = f'<div class="audit-strip">{items_markup}</div>'
     
-    st.markdown(
+    render_html(
         f"""
         <div class="console-header animate-fade-in">
             <div class="console-eyebrow">{escape(eyebrow)}</div>
@@ -32,8 +51,7 @@ def render_shell_header(
             <div class="console-subtitle">{escape(subtitle)}</div>
             {telemetry_html}
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -55,7 +73,7 @@ def render_active_profile_card(
     
     size_str = f" | {file_size_kb:.1f} KB" if file_size_kb else ""
     
-    st.markdown(
+    render_html(
         f"""
         <div class="console-card animate-slide-up" style="border-left: 3px solid {accent_color}; margin-bottom: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid {TOKENS['border']}; padding-bottom: 0.85rem; margin-bottom: 1rem;">
@@ -96,8 +114,7 @@ def render_active_profile_card(
                 </div>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -106,7 +123,7 @@ def render_analytical_panel_header(title: str, subtitle: Optional[str] = None, b
     badge_html = f'<span class="status-badge badge-{badge_type.lower()}">{escape(badge_text)}</span>' if badge_text else ""
     subtitle_html = f'<div style="color: {TOKENS["muted"]}; font-size: 0.88rem; margin-top: 0.25rem;">{escape(subtitle)}</div>' if subtitle else ""
     
-    st.markdown(
+    render_html(
         f"""
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin: 1.25rem 0 0.75rem; border-bottom: 1px solid {TOKENS['border']}; padding-bottom: 0.5rem;">
             <div>
@@ -115,8 +132,7 @@ def render_analytical_panel_header(title: str, subtitle: Optional[str] = None, b
             </div>
             <div>{badge_html}</div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -135,7 +151,7 @@ def render_priority_gap_card(
     badge_class = "badge-critical" if priority_upper == "HIGH" else ("badge-high" if priority_upper == "MEDIUM" else "badge-low")
     border_accent = TOKENS["danger"] if priority_upper == "HIGH" else (TOKENS["warning"] if priority_upper == "MEDIUM" else TOKENS["stable"])
     
-    st.markdown(
+    render_html(
         f"""
         <div class="console-card animate-card-hover" style="border-left: 3px solid {border_accent}; margin-bottom: 1rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid {TOKENS['border']}; padding-bottom: 0.6rem; margin-bottom: 0.75rem;">
@@ -169,8 +185,7 @@ def render_priority_gap_card(
                 <span style="color: {TOKENS['muted']}; font-size: 0.7rem;">ACTIONABLE ROADMAP READY</span>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -182,7 +197,7 @@ def render_resume_tip_card(
     after_text: str,
 ) -> None:
     """Render a structured before/after resume transformation card."""
-    st.markdown(
+    render_html(
         f"""
         <div class="console-card animate-card-hover" style="border-left: 3px solid {TOKENS['info']}; margin-bottom: 1.25rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid {TOKENS['border']}; padding-bottom: 0.5rem; margin-bottom: 0.75rem;">
@@ -210,8 +225,7 @@ def render_resume_tip_card(
                 </div>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
@@ -235,7 +249,7 @@ def render_roadmap_phase_card(
     accent = TOKENS["danger"] if priority_upper == "HIGH" else (TOKENS["warning"] if priority_upper == "MEDIUM" else TOKENS["stable"])
     badge_class = "badge-critical" if priority_upper == "HIGH" else ("badge-high" if priority_upper == "MEDIUM" else "badge-low")
     
-    st.markdown(
+    render_html(
         f"""
         <div class="console-card animate-slide-up" style="border-left: 3px solid {accent}; margin-bottom: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid {TOKENS['border']}; padding-bottom: 0.75rem; margin-bottom: 1rem;">
@@ -308,15 +322,14 @@ def render_roadmap_phase_card(
                 </div>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
 def render_dataset_profile_card(name: str, file_type: str, row_count: int, col_count: int, quality_score: int) -> None:
     """Render a data quality profile card with precision telemetry."""
     score_color = TOKENS["stable"] if quality_score >= 95 else (TOKENS["warning"] if quality_score >= 80 else TOKENS["danger"])
-    st.markdown(
+    render_html(
         f"""
         <div class="console-card" style="border-left: 3px solid {score_color}; margin-bottom: 0.75rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
@@ -337,7 +350,7 @@ def render_dataset_profile_card(name: str, file_type: str, row_count: int, col_c
                 </div>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
+
 

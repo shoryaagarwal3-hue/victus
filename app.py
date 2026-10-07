@@ -16,6 +16,8 @@ import streamlit as st
 from frontend.ui_theme import inject_css, TOKENS
 from frontend.ui_components import kpi, badge, quadrant_badge, executive_banner
 from frontend.stitch_view import (
+    render_html,
+    render_sidebar_html,
     render_shell_header,
     render_active_profile_card,
     render_analytical_panel_header,
@@ -105,14 +107,13 @@ def get_active_sas_data():
 # -----------------------------------------------------------------------------------------
 # SIDEBAR NAVIGATION
 # -----------------------------------------------------------------------------------------
-st.sidebar.markdown(
+render_sidebar_html(
     """
     <div style="padding:0 0 1rem; border-bottom:1px solid #232937; margin-bottom:1rem;">
         <div style="color:#3DDC97; font-family:'Space Mono',monospace; font-size:0.75rem; font-weight:700; letter-spacing:0.12em;">VICTUS ANALYTICS COMMAND</div>
         <div style="color:#E6E9EF; font-family:'Space Grotesk',sans-serif; font-size:1.15rem; font-weight:700; margin-top:0.25rem;">Career Intelligence Console</div>
     </div>
-    """,
-    unsafe_allow_html=True,
+    """
 )
 
 nav_selection = st.sidebar.radio(
@@ -139,7 +140,7 @@ role_options = list(STANDARD_ROLES.keys()) + ["Custom Job Description"]
 selected_role = st.sidebar.selectbox("Select Benchmark Role", role_options, index=0)
 
 st.sidebar.markdown("---")
-st.sidebar.markdown(
+render_sidebar_html(
     """
     <div style="font-family:'Space Mono',monospace; font-size:0.7rem; color:#8A93A6; line-height:1.7;">
         <div><b>ENGINE:</b> Deterministic V3.0</div>
@@ -147,8 +148,7 @@ st.sidebar.markdown(
         <div><b>MARKET SCOPE:</b> 17,443 Postings</div>
         <div><b>AUTHENTICATION:</b> Offline / Local</div>
     </div>
-    """,
-    unsafe_allow_html=True,
+    """
 )
 
 # Initialize Session State
@@ -220,13 +220,12 @@ if nav_selection == "Resume Scanner & Parser":
     col_upload, col_role = st.columns([3, 2], gap="large")
     
     with col_upload:
-        st.markdown(
+        render_html(
             f"""
             <div style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: {TOKENS['info']}; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">
                 [WORKSTATION INPUT] CANDIDATE RESUME SOURCE
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
         uploaded_file = st.file_uploader(
             "Upload Resume Document (PDF, DOCX, or TXT)",
@@ -239,15 +238,14 @@ if nav_selection == "Resume Scanner & Parser":
             file_bytes_raw = uploaded_file.getvalue()
             f_size_kb = round(len(file_bytes_raw) / 1024, 1)
             
-            st.markdown(
+            render_html(
                 f"""
                 <div style="background: {TOKENS['surface_alt']}; border: 1px solid {TOKENS['stable']}; border-radius: 4px; padding: 0.85rem 1rem; margin-bottom: 0.75rem;">
                     <div style="color: {TOKENS['stable']}; font-family: 'Space Mono', monospace; font-size: 0.72rem; font-weight: 700;">[FILE READY FOR ANALYSIS]</div>
                     <div style="color: {TOKENS['text']}; font-weight: 700; margin-top: 0.2rem; font-family: 'Space Grotesk', sans-serif;">{html.escape(uploaded_file.name)}</div>
                     <div style="color: {TOKENS['muted']}; font-family: 'Space Mono', monospace; font-size: 0.75rem; margin-top: 0.1rem;">Size: {f_size_kb} KB | Deterministic Parser Armed</div>
                 </div>
-                """,
-                unsafe_allow_html=True,
+                """
             )
             
             if st.button("LOAD & ANALYZE UPLOADED RESUME", type="primary", use_container_width=True, key="btn_load_real_resume"):
@@ -272,15 +270,14 @@ if nav_selection == "Resume Scanner & Parser":
         else:
             st.caption("Supported formats: **PDF** | **DOCX** | **TXT** (Deterministic parsing | 100% Offline Local)")
             
-        st.markdown(
+        render_html(
             f"""
             <div style="margin: 1.25rem 0 0.5rem; border-top: 1px solid {TOKENS['border']}; padding-top: 1rem;">
                 <div style="font-family: 'Space Mono', monospace; font-size: 0.72rem; color: {TOKENS['muted']}; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">
                     [ONE-CLICK BENCHMARKS] REFERENCE DEMO PROFILES
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
         
         c_btn1, c_btn2 = st.columns(2)
@@ -323,13 +320,12 @@ if nav_selection == "Resume Scanner & Parser":
                 st.rerun()
 
     with col_role:
-        st.markdown(
+        render_html(
             f"""
             <div style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: {TOKENS['info']}; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem;">
                 [TARGET SPECIFICATION] ROLE & JD BENCHMARK
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
         st.markdown(f"**Target Role Benchmark:** `{selected_role}`")
         
@@ -388,7 +384,7 @@ if nav_selection == "Resume Scanner & Parser":
     with t_exp:
         if res.experience:
             for exp in res.experience:
-                st.markdown(
+                render_html(
                     f"""
                     <div class="console-card" style="border-left: 3px solid {TOKENS['info']}; margin-bottom: 0.75rem;">
                         <div style="font-size: 1.05rem; font-weight: 700; color: {TOKENS['text']}; font-family: 'Space Grotesk', sans-serif;">
@@ -398,8 +394,7 @@ if nav_selection == "Resume Scanner & Parser":
                             {''.join(f'<li>{html.escape(r)}</li>' for r in exp.responsibilities)}
                         </ul>
                     </div>
-                    """,
-                    unsafe_allow_html=True,
+                    """
                 )
         else:
             st.info("No employment history entries detected.")
@@ -407,7 +402,7 @@ if nav_selection == "Resume Scanner & Parser":
     with t_proj:
         if res.projects:
             for p in res.projects:
-                st.markdown(
+                render_html(
                     f"""
                     <div class="console-card" style="border-left: 3px solid {TOKENS['purple']}; margin-bottom: 0.75rem;">
                         <div style="font-size: 1.05rem; font-weight: 700; color: {TOKENS['text']}; font-family: 'Space Grotesk', sans-serif;">
@@ -418,8 +413,7 @@ if nav_selection == "Resume Scanner & Parser":
                         </div>
                         {'<div style="font-family: \'Space Mono\', monospace; font-size: 0.78rem; color: ' + TOKENS['stable'] + ';"><strong>Measurable Outcomes:</strong> ' + html.escape(', '.join(p.measurable_outcomes)) + '</div>' if p.measurable_outcomes else ''}
                     </div>
-                    """,
-                    unsafe_allow_html=True,
+                    """
                 )
         else:
             st.info("No projects detected.")
@@ -443,7 +437,7 @@ elif nav_selection == "Job Match & Requirement Fit":
     m_col1, m_col2 = st.columns([2, 3], gap="large")
     
     with m_col1:
-        st.markdown(
+        render_html(
             f"""
             <div class="console-card">
                 <div style="font-family: 'Space Mono', monospace; font-size: 0.72rem; color: {TOKENS['muted']}; font-weight: 700; text-transform: uppercase;">
@@ -460,8 +454,7 @@ elif nav_selection == "Job Match & Requirement Fit":
                     <div>Education Fit (5%): <strong style="color:{TOKENS['text']};">{match.education_fit_score:.1f}%</strong></div>
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
 
     with m_col2:
@@ -811,14 +804,13 @@ elif nav_selection == "ML Benchmarks & Validation":
                 index=["Actual: Low (0)", "Actual: High (1)"],
             )
             st.dataframe(cm_df, use_container_width=True)
-            st.markdown(
+            render_html(
                 f"""
                 <div style="font-family: 'Space Mono', monospace; font-size: 0.78rem; color: {TOKENS['muted']}; margin-top: 0.5rem;">
                     <div>Specificity: <strong style="color: {TOKENS['text']};">{cm.specificity*100:.1f}%</strong></div>
                     <div>NPV: <strong style="color: {TOKENS['text']};">{cm.negative_predictive_value*100:.1f}%</strong></div>
                 </div>
-                """,
-                unsafe_allow_html=True,
+                """
             )
 
 

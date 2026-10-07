@@ -2,6 +2,7 @@
 Implements the 'VICTUS Analytics Command' visual language:
 Technical Minimalist / Precision Workstation aesthetic with subtle CSS animations.
 """
+import textwrap
 from typing import Dict
 import streamlit as st
 
@@ -23,9 +24,10 @@ TOKENS: Dict[str, str] = {
 
 def inject_css() -> None:
     """Inject the centralized Stitch design system CSS rules into the Streamlit DOM."""
-    st.markdown(
-        f"""<style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+    css_content = textwrap.dedent(
+        f"""
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
     
     :root {{
         --bg: {TOKENS['background']};
@@ -474,6 +476,8 @@ def inject_css() -> None:
     ::-webkit-scrollbar-thumb:hover {{
         background: #394354;
     }}
-    </style>""",
-        unsafe_allow_html=True,
+    </style>
+    """
     )
+    st.markdown(css_content.strip(), unsafe_allow_html=True)
+
