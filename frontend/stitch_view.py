@@ -1,11 +1,8 @@
-"""Stitch Design System Presentation Layer Components.
-Implements the 'VICTUS Analytics Command' Workstation Architecture:
-High-density visual layouts, telemetry indicators, audit strips, and modular analytical panels.
-"""
+from __future__ import annotations
 from html import escape
 import re
 import textwrap
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import pandas as pd
 import streamlit as st
 from frontend.ui_theme import TOKENS
@@ -32,7 +29,7 @@ def render_shell_header(
     eyebrow: str = "VICTUS DATA SCIENCE CAREER INTELLIGENCE & DECISION-SUPPORT SYSTEM",
     title: str = "Evidence-Grounded Resume Analysis & Career Navigation",
     subtitle: str = "Deterministic extraction, 5-factor requirement matching, SAS market evidence integration, and actionable learning roadmaps.",
-    telemetry_items: Optional[List[tuple[str, str]]] = None,
+    telemetry_items: Optional[List[Tuple[str, str]]] = None,
 ) -> None:
     """Render the master workstation header with telemetry strip."""
     telemetry_html = ""

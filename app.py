@@ -3,10 +3,18 @@ Production Decision-Support Engine for Resume Parsing, Skill Gap Prioritization,
 Market Evidence Integration, Actionable Learning Roadmaps, and Audit Reporting.
 Implements the Stitch 'VICTUS Analytics Command' Design System.
 """
+import os
+from pathlib import Path
+import sys
+
+# Ensure repository root is in sys.path for robust frontend imports
+ROOT_DIR = Path(__file__).resolve().parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
 from datetime import datetime
 import html
 import io
-from pathlib import Path
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
