@@ -345,6 +345,54 @@ def inject_css() -> None:
         box-shadow: none !important;
     }}
     
+    /* Selectbox Dropdown Menu & Popovers */
+    [data-baseweb="popover"], [data-baseweb="menu"] {{
+        background-color: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 4px !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75) !important;
+    }}
+    [role="option"] {{
+        background-color: transparent !important;
+        color: var(--text) !important;
+        font-family: var(--font-primary) !important;
+        font-size: 0.88rem !important;
+        transition: background-color 0.1s ease;
+    }}
+    [role="option"]:hover, [role="option"][aria-selected="true"] {{
+        background-color: var(--surface-alt) !important;
+        color: var(--stable) !important;
+    }}
+
+    /* Expandable Sections */
+    [data-testid="stExpander"] {{
+        background-color: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 4px !important;
+        margin-bottom: 0.85rem !important;
+    }}
+    [data-testid="stExpander"] details {{
+        border: none !important;
+    }}
+    [data-testid="stExpander"] summary {{
+        font-family: var(--font-primary) !important;
+        font-weight: 600 !important;
+        color: var(--text) !important;
+        padding: 0.75rem 1rem !important;
+    }}
+    [data-testid="stExpander"] summary:hover {{
+        color: var(--border-focus) !important;
+    }}
+    
+    /* Code & Markdown Blocks */
+    pre, code {{
+        font-family: var(--font-mono) !important;
+        background-color: var(--surface-alt) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 4px !important;
+        color: var(--stable) !important;
+    }}
+    
     /* Tabs Component */
     [data-testid="stTabs"] [role="tablist"] {{
         border-bottom: 1px solid var(--border) !important;
